@@ -1,5 +1,7 @@
 #Don't add data to the repo
 *.csv
+#Ignore data folder
+kaggle-data/
 
 #####=== IPythonNotebook ===#####
 # Temporary data
