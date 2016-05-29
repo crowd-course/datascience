@@ -5,3 +5,4 @@ pytz==2016.4
 scikit-learn==0.17.1
 scipy==0.17.1
 six==1.10.0
+scikit-neuralnetwork=0.7
