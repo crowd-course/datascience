@@ -1,1 +1,201 @@
+LINE PLOT
+
+In [1]: import matplotlib as mp
+
+In [2]: import matplotlib.pyplot as plt
+
+In [3]: plt.plot([1,2,3,4])
+Out[3]: [<matplotlib.lines.Line2D at 0x61b7170>]
+
+In [4]: plt.show()
+
+ 
+
+In [5]: plt.plot([1,2,3,4], [2,5,8,15])
+Out[5]: [<matplotlib.lines.Line2D at 0x63cce70>]
+
+In [6]: plt.show()
+
+ 
+
+
+PLOTTING VALUES WITH DOTS
+
+In [7]: plt.plot([1,2,3,4], [2,5,8,15], 'ro')
+Out[7]: [<matplotlib.lines.Line2D at 0x64fc670>]
+
+In [8]: plt.axis([0,6,0,20])
+Out[8]: [0, 6, 0, 20]
+
+In [9]: plt.show()
+
+
+ 
+
+PLOTTING SEVERAL LINES WITH DIFFERENT FORMAT STYLE
+
+In [11]: import numpy as np
+
+In [12]: t = np.arange(0., 5., 0.2)
+
+In [13]: plt.plot(t, t, 'r--', t, t**2, 'bs', t, t**3, 'g^')
+Out[13]: 
+[<matplotlib.lines.Line2D at 0x65a90b0>,
+<matplotlib.lines.Line2D at 0x65a91b0>,
+<matplotlib.lines.Line2D at 0x65a9570>]
+
+In [14]: plt.show()
+
+ 
+
+
+SIMPLE PLOT
+
+In [16]: x = np.arange(0, 3*np.pi, 0.1)
+
+In [17]: y = np.sin(x)
+
+In [18]: plt.plot(x,y)
+Out[18]: [<matplotlib.lines.Line2D at 0x66a7d30>]
+
+In [19]: plt.show()
+
+ 
+
+
+SINE AND COSINE PLOT
+
+In [20]: x = np.arange(0, 3 * np.pi, 0.1)
+In [22]: y_sin = np.sin(x)
+
+In [23]: y_cos = np.cos(x)
+
+In [24]: plt.plot(x, y_sin)
+Out[24]: [<matplotlib.lines.Line2D at 0x673bcf0>]
+
+In [25]: plt.plot(x, y_cos)
+Out[25]: [<matplotlib.lines.Line2D at 0x678c230>]
+
+In [26]: plt.xlabel('x axis label')
+Out[26]: <matplotlib.text.Text at 0x65dc530>
+
+In [27]: plt.ylabel('y axis label')
+Out[27]: <matplotlib.text.Text at 0x651c250>
+
+In [28]: plt.title ('Sine and Cosine')
+Out[28]: <matplotlib.text.Text at 0x6720b10>
+
+In [29]: plt.legend(['Sine', 'Cosine'])
+Out[29]: <matplotlib.legend.Legend at 0x678c510>
+
+In [30]: plt.show()
+
+ 
+
+
+SUBPLOTS
+
+In [31]: x = np.arange(0, 3 * np.pi, 0.1)
+
+In [32]: y_sin = np.sin(x)
+
+In [33]: y_cos = np.cos(x)
+
+In [34]: plt.subplot(2,1,1)
+Out[34]: <matplotlib.axes._subplots.AxesSubplot at 0x65d4330>
+
+In [35]: plt.plot(x, y_sin)
+Out[35]: [<matplotlib.lines.Line2D at 0x684f650>]
+
+In [36]: plt.title('Sine')
+Out[36]: <matplotlib.text.Text at 0x68353d0>
+
+In [37]: plt.subplot(2,1,2)
+Out[37]: <matplotlib.axes._subplots.AxesSubplot at 0x684f630>
+
+In [38]: plt.plot(x, y_cos)
+Out[38]: [<matplotlib.lines.Line2D at 0x68ed150>]
+
+In [39]: plt.title('Cosine')
+Out[39]: <matplotlib.text.Text at 0x68ce510>
+
+In [40]: plt.show()
+
+ 
+
+
+HISTOGRAM
+
+data = np.random.normal(5.0, 3.0, 1000)
+
+In [12]: plt.hist(data)
+Out[12]: 
+(array([ 2., 12., 44., 100., 200., 249., 214., 123., 43., 13.]),
+array([ -5.6815256 , -3.7794175 , -1.8773094 , 0.02479871,
+1.92690681, 3.82901491, 5.73112301, 7.63323111,
+9.53533921, 11.43744731, 13.33955541]),
+<a list of 10 Patch objects>)
+
+In [13]: plt.xlabel('data')
+Out[13]: <matplotlib.text.Text at 0x74b7250>
+
+In [14]: plt.show()
+
+
+ 
+
+
+
+In [15]: bins = np.arange(-5., 16., 1.)
+
+In [16]: plt.hist(data, bins)
+Out[16]: 
+(array([ 0., 5., 8., 13., 31., 33., 74., 104., 110.,
+138., 120., 113., 103., 74., 25., 27., 13., 5.,
+3., 0.]),
+array([ -5., -4., -3., -2., -1., 0., 1., 2., 3., 4., 5.,
+6., 7., 8., 9., 10., 11., 12., 13., 14., 15.]),
+<a list of 20 Patch objects>)
+
+In [17]: plt.show()
+
+ 
+
+
+BAR CHART
+
+In [3]: year = (2011, 2012, 2013, 2014, 2015)
+
+In [4]: score = (83, 78, 99, 60, 80)
+In [13]: plt.xlabel('year')
+Out[13]: <matplotlib.text.Text at 0x6bc5f10>
+
+In [14]: plt.ylabel('score')
+Out[14]: <matplotlib.text.Text at 0x6d16930>
+
+In [15]: plt.bar(year, score)
+Out[15]: <Container object of 5 artists>
+
+In [16]: plt.show()
+
+ 
+
+
+SCATTER PLOT
+
+In [14]: year = (2011, 2012, 2013, 2014, 2015)
+
+In [15]: score = (83, 78, 99, 60, 80)
+
+In [16]: plt.scatter(year, score)
+Out[16]: <matplotlib.collections.PathCollection at 0x6a5b430>
+
+In [17]: plt.xlabel(year)
+Out[17]: <matplotlib.text.Text at 0x6753ff0>
+
+In [18]: plt.ylabel(score)
+Out[18]: <matplotlib.text.Text at 0x69bdb10>
+
+In [19]: plt.show()
+ 
 
