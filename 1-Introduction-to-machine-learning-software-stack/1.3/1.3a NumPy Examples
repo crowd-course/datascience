@@ -1,0 +1,521 @@
+ARRAYS
+
+The central feature of NumPy is the array object class. Arrays are similar to lists in Python.
+Arrays make operations with large amounts of numeric data very fast and are generally much more efficient than lists.
+An array can be created from a list:
+In [1]: import numpy as np
+
+In [2]: a = np.array([1,2,3,4,5], float)
+
+In [3]: a
+Out[3]: array([ 1., 2., 3., 4., 5.])
+
+We can also find out the type of each member of the list.
+In [4]: type(a)
+Out[4]: numpy.ndarray
+
+Arrays can be accessed with the help of index. 
+In [5]: a[:2]
+Out[5]: array([ 1., 2.])
+This indexing gives the elements from the beginning of the array before the 3rd element.
+
+In [6]: a[3]
+Out[6]: 4.0
+
+In [7]: a[0]
+Out[7]: 1.0
+
+In [8]: a[0] = 7
+
+In [9]: a
+Out[9]: array([ 7., 2., 3., 4., 5.])
+
+An example of two-dimensional array –
+In [12]: a = np.array([[1,2,3], [4,5,6]], float)
+
+In [13]: a
+Out[13]: 
+array([[ 1., 2., 3.],
+[ 4., 5., 6.]])
+In [14]: a[0,0]
+Out[14]: 1.0
+
+In [15]: a[0,1]
+Out[15]: 2.0
+
+Array slicing works with multiple dimensions in the same way as usual, applying each slice specification as a filter to a specified dimension. Use of a single ":" in a dimension indicates the use of everything along that dimension
+In [16]: a[1,:]
+Out[16]: array([ 4., 5., 6.])
+
+In [17]: a[:,2]
+Out[17]: array([ 3., 6.])
+
+In [18]: a[-1:, -2:]
+Out[18]: array([[ 5., 6.]])
+
+The shape property of an array returns a tuple with the size of each array dimension
+In [19]: a.shape
+Out[19]: (2, 3)
+The dtype property tells you what type of values are stored by the array
+In [20]: a.dtype
+Out[20]: dtype('float64')
+
+The len function returns the length of the first axis
+In [23]: len(a)
+Out[23]: 2
+
+The in statement can be used to test if values are present in an array
+In [24]: 2 in a
+Out[24]: True
+
+In [25]: 10 in a
+Out[25]: False
+
+Arrays can be reshaped using tuples that specify new dimensions. In the following example, we turn a twenty-element one-dimensional array into a two-dimensional array whose first axis has five elements and whose second axis has four elements
+In [26]: a = np.array(range(20), float)
+
+In [27]: a
+Out[27]: 
+array([ 0., 1., 2., 3., 4., 5., 6., 7., 8., 9., 10.,
+11., 12., 13., 14., 15., 16., 17., 18., 19.])
+
+In [28]: a = a.reshape((5,4))
+
+In [29]: a
+Out[29]: 
+array([[ 0., 1., 2., 3.],
+[ 4., 5., 6., 7.],
+[ 8., 9., 10., 11.],
+[ 12., 13., 14., 15.],
+[ 16., 17., 18., 19.]])
+In [30]: a.shape
+Out[30]: (5, 4)
+The reshape function creates a new array and does not itself modify the original array.
+
+The copy function can be used to create a new, separate copy of an array in memory
+In [31]: a = np.array([1,2,3], float)
+
+In [32]: b = a
+
+In [33]: c = a.copy()
+
+In [34]: a[0] = 0
+
+In [35]: a
+Out[35]: array([ 0., 2., 3.])
+
+In [36]: b
+Out[36]: array([ 0., 2., 3.])
+
+In [37]: c
+Out[37]: array([ 1., 2., 3.])
+
+Lists can also be created from array
+In [38]: a - np.array([1,2,3], float)
+Out[38]: array([-1., 0., 0.])
+
+In [39]: a.tolist()
+Out[39]: [0.0, 2.0, 3.0]
+
+In [40]: list(a)
+Out[40]: [0.0, 2.0, 3.0]
+We can convert the raw data in an array to a binary string (i.e., not in human-readable form) using the tostring function. The fromstring function then allows an array to be created from this data later on. These routines are sometimes convenient for saving large amount of array data in files that can be read later on.
+In [48]: a = np.array([5,4,3], float)
+
+In [49]: s = a.tostring()
+
+In [50]: s
+Out[50]: '\x00\x00\x00\x00\x00\x00\x14@\x00\x00\x00\x00\x00\x00\x10@\x00\x00\x00\x00\x00\x00\x08@'
+
+In [51]: np.fromstring(s)
+Out[51]: array([ 5., 4., 3.])
+
+Array can also be transposed with the help of transpose function
+In [52]: a = np.array(range(6), float).reshape((3,2))
+
+In [53]: a
+Out[53]: 
+array([[ 0., 1.],
+[ 2., 3.],
+[ 4., 5.]])
+
+In [54]: a.transpose()
+Out[54]: 
+array([[ 0., 2., 4.],
+[ 1., 3., 5.]])
+
+One-dimensional versions of multi-dimensional arrays can be generated with flatten
+In [55]: a = np.array([[1, 2, 3], [4, 5, 6]], float)
+
+In [56]: a
+Out[56]: 
+array([[ 1., 2., 3.],
+[ 4., 5., 6.]])
+
+In [57]: a.flatten()
+Out[57]: array([ 1., 2., 3., 4., 5., 6.])
+
+Two or more arrays can be concatenated together using the concatenate function with a tuple of the arrays to be joined
+In [62]: a = np.array([1,2], float)
+
+In [63]: b = np.array([3,4,5], float)
+
+In [64]: c = np.array([6,7,8,9], float)
+
+In [65]: np.concatenate((a, b, c))
+Out[65]: array([ 1., 2., 3., 4., 5., 6., 7., 8., 9.])
+
+If an array has more than one dimension, it is possible to specify the axis along which multiple arrays are concatenated. By default (without specifying the axis), NumPy concatenates along the first dimension
+In [66]: a = np.array([[1, 2], [3, 4]], float)
+
+In [67]: b = np.array([[5, 6], [7,8]], float)
+
+In [68]: np.concatenate((a,b))
+Out[68]: 
+array([[ 1., 2.],
+[ 3., 4.],
+[ 5., 6.],
+[ 7., 8.]])
+
+In [69]: np.concatenate((a,b), axis = 0)
+Out[69]: 
+array([[ 1., 2.],
+[ 3., 4.],
+[ 5., 6.],
+[ 7., 8.]])
+
+In [70]: np.concatenate((a,b), axis = 1)
+Out[70]: 
+array([[ 1., 2., 5., 6.],
+[ 3., 4., 7., 8.]])
+
+The dimensionality of an array can be increased using the newaxis constant in bracket notation
+In [75]: a = np.array([1, 2, 3], float)
+
+In [76]: a
+Out[76]: array([ 1., 2., 3.])
+
+In [77]: a[:, np.newaxis].shape
+Out[77]: (3, 1)
+
+In [79]: a[np.newaxis,:]
+Out[79]: array([[ 1., 2., 3.]])
+
+In [80]: a[np.newaxis,:].shape
+Out[80]: (1, 3)
+
+The arange function returns an array
+In [82]: np.arange(5, dtype = float)
+Out[82]: array([ 0., 1., 2., 3., 4.])
+
+In [83]: np.arange(1,6,2, dtype = int)
+Out[83]: array([1, 3, 5])
+
+The functions zeros and ones create new arrays of specified dimensions filled with these values
+In [84]: np.ones((3,2), dtype = float)
+Out[84]: 
+array([[ 1., 1.],
+[ 1., 1.],
+[ 1., 1.]])
+
+In [85]: np.zeros(7, dtype = int)
+Out[85]: array([0, 0, 0, 0, 0, 0, 0])
+
+The zeros_like and ones_like functions create a new array with the same dimensions and type of an existing one
+In [86]: a = np.array([[1,2,3], [4,5,6]], float)
+
+In [87]: np.zeros_like(a)
+Out[87]: 
+array([[ 0., 0., 0.],
+[ 0., 0., 0.]])
+
+In [88]: np.ones_like(a)
+Out[88]: 
+array([[ 1., 1., 1.],
+[ 1., 1., 1.]])
+
+
+
+
+ARRAY MATHEMATICS
+
+When standard mathematical operations are used with arrays, they are applied on an element-by-element basis. This means that the arrays should be the same size during addition, subtraction
+In [90]: a = np.array([1,2,3])
+
+In [91]: b = np.array([5,6,7])
+
+In [92]: a+b
+Out[92]: array([ 6, 8, 10])
+
+In [93]: a-b
+Out[93]: array([-4, -4, -4])
+
+In [94]: a*b
+Out[94]: array([ 5, 12, 21])
+
+In [95]: b/a
+Out[95]: array([5, 3, 2])
+
+In [96]: a%b
+Out[96]: array([1, 2, 3])
+
+In [97]: b**a
+Out[97]: array([ 5, 36, 343])
+
+For two-dimensional arrays, multiplication remains element wise and does not correspond to matrix multiplication
+In [98]: a = np.array([[1,2], [3,4]])
+
+In [99]: b = np.array([[2,0], [1,3]])
+
+In [100]: a*b
+Out[100]: 
+array([[ 2, 0],
+[ 3, 12]])
+We will see Errors when the arrays do not match in size.
+
+Arrays that do not match in the number of dimensions will be broadcasted by Python to perform mathematical operations
+In [103]: a = np.array([[1, 2], [3, 4], [5, 6]])
+
+In [104]: b = np.array([-1, 3])
+
+In [105]: a
+Out[105]: 
+array([[1, 2],
+[3, 4],
+[5, 6]])
+
+In [106]: b
+Out[106]: array([-1, 3])
+
+In [107]: a + b
+Out[107]: 
+array([[0, 5],
+[2, 7],
+[4, 9]])
+
+In addition to the standard operators, NumPy offers a large library of common mathematical functions that can be applied elementwise to arrays. Among these are the functions: abs, sign, sqrt, log, log10, exp, sin, cos, tan, arcsin, arccos, arctan, sinh, cosh, tanh, arcsinh, arccosh, and arctanh
+In [108]: a = np.array([6,8,9])
+
+In [109]: np.sqrt(a)
+Out[109]: array([ 2.44948974, 2.82842712, 3. ])
+
+In [110]: np. sin(a)
+Out[110]: array([-0.2794155 , 0.98935825, 0.41211849])
+
+In [111]: np.cos(a)
+Out[111]: array([ 0.96017029, -0.14550003, -0.91113026])
+
+In [112]: np.log(a)
+Out[112]: array([ 1.79175947, 2.07944154, 2.19722458])
+
+In [113]: np.log10(a)
+Out[113]: array([ 0.77815125, 0.90308999, 0.95424251])
+
+In [114]: np.tan(a)
+Out[114]: array([-0.29100619, -6.79971146, -0.45231566])
+
+
+The functions floor, ceil, and rint give the lower, upper, or nearest (rounded) integer
+In [117]: a = np.array([3.6, 8.4, 9.2, 5.9], float)
+
+In [118]: np.floor(a)
+Out[118]: array([ 3., 8., 9., 5.])
+
+In [119]: np.ceil(a)
+Out[119]: array([ 4., 9., 10., 6.])
+
+In [120]: np.rint(a)
+Out[120]: array([ 4., 8., 9., 6.])
+Also included in the NumPy module are two important mathematical constants
+In [121]: np.pi
+Out[121]: 3.141592653589793
+
+In [122]: np.e
+Out[122]: 2.718281828459045
+
+
+
+
+ARRAY ITERATION
+
+It is possible to iterate over arrays in a manner similar to that of lists
+In [131]: a = np.array([1,3,6])
+
+In [132]: for x in a:
+     ...: print x
+     ...: 
+1
+3
+6
+
+For multidimensional arrays, iteration proceeds over the first axis such that each loop returns a subsection of the array
+In [133]: a = np.array([[1, 2], [3, 4], [5, 6]], float)
+
+In [134]: for x in a:
+     ...: print x
+     ...: 
+[ 1. 2.]
+[ 3. 4.]
+[ 5. 6.]
+
+
+Multiple assignment can also be used with array iteration
+In [135]: a = np.array([[1, 2], [3, 4], [5, 6]])
+
+In [136]: for (x,y) in a:
+     ...: print x*y
+     ...: 
+2
+12
+30
+
+
+
+
+ARRAY OPERATIONS
+
+The elements in an array can be summed or multiplied
+In [137]: a = np.array([2,4,3])
+
+In [138]: a.sum()
+Out[138]: 9
+
+In [139]: a.prod()
+Out[139]: 24
+
+Here, member functions of the arrays were used. We can also use standalone functions in the NumPy module
+In [140]: np.sum(a)
+Out[140]: 9
+
+In [141]: np.prod(a)
+Out[141]: 24
+
+A number of routines enable computation of statistical quantities in array datasets, such as the mean (average), variance, and standard deviation
+In [143]: a.mean()
+Out[143]: 3.0
+
+In [144]: a.var()
+Out[144]: 0.66666666666666663
+
+In [145]: a.std()
+Out[145]: 0.81649658092772603
+
+It's also possible to find the minimum and maximum element values
+In [150]: a = np.array([4,9,6])
+
+In [151]: a.min()
+Out[151]: 4
+
+In [152]: a.max()
+Out[152]: 9
+
+The argmin and argmax functions return the array indices of the minimum and maximum values
+In [153]: a = np.array([4,9,6])
+
+In [154]: a.argmin()
+Out[154]: 0
+
+In [155]: a.argmax()
+Out[155]: 1
+
+For multidimensional arrays, each of the functions thus far described can take an optional argument axis that will perform an operation along only the specified axis, placing the results in a return array
+In [163]: a = np.array([[0,1], [2,-4], [9,7]])
+
+In [164]: a.mean(axis=0)
+Out[164]: array([ 3.66666667, 1.33333333])
+
+In [165]: a.mean(axis=1)
+Out[165]: array([ 0.5, -1. , 8. ])
+
+In [166]: a.min(axis=1)
+Out[166]: array([ 0, -4, 7])
+
+In [167]: a.max(axis=0)
+Out[167]: array([9, 7])
+
+Arrays can also be sorted
+In [168]: a = np.array([8,5,9,3,7,0,12])
+
+In [169]: sorted(a)
+Out[169]: [0, 3, 5, 7, 8, 9, 12]
+
+In [170]: a.sort()
+
+In [171]: a
+Out[171]: array([ 0, 3, 5, 7, 8, 9, 12])
+
+Values in an array can be "clipped" to be within a prespecified range
+In [172]: a = np.array([8,5,9,3,7,0,12])
+
+In [173]: a.clip(0,5)
+Out[173]: array([5, 5, 5, 3, 5, 0, 5])
+
+Unique elements can be extracted from an array.
+In [176]: a = np.array([7,7,7,7,8,1,3,2,2,5,5,9,9,1])
+
+In [177]: np.unique(a)
+Out[177]: array([1, 2, 3, 5, 7, 8, 9])
+
+
+
+
+BOOLEAN COMPARISONS
+
+Boolean comparisons can be used to compare members element wise on arrays of equal size. The return value is an array of Boolean True / False values.
+In [178]: a = np.array([6,9,4], float)
+
+In [179]: b = np.array([0,4,7], float)
+
+In [180]: a > b
+Out[180]: array([ True, True, False], dtype=bool)
+In [181]: a == b
+Out[181]: array([False, False, False], dtype=bool)
+
+In [182]: a <= b
+Out[182]: array([False, False, True], dtype=bool)
+
+The results of a Boolean comparison can be stored in an array
+In [183]: c = a > b
+
+In [184]: c
+Out[184]: array([ True, True, False], dtype=bool)
+
+Arrays can be compared to single values using broadcasting
+In [185]: a = np.array([2,9,7,5,8])
+
+In [186]: a > 4
+Out[186]: array([False, True, True, True, True], dtype=bool)
+
+It is possible to test whether or not values are NaN ("not a number") or finite
+In [197]: np.isnan(a)
+Out[197]: array([False, True, False], dtype=bool)
+
+In [198]: np.isfinite(a)
+Out[198]: array([ True, False, False], dtype=bool)
+
+
+
+
+STATISTICS
+
+In addition to the mean, var, and std functions, NumPy supplies several other methods for returning statistical features of arrays.
+In [199]: a = np.array([1,3,5,7,4,6,9,8])
+
+In [200]: np.median(a)
+Out[200]: 5.5
+
+The correlation coefficient for multiple variables observed at multiple instances can be found for arrays of the form [[x1, x2, …], [y1, y2, …], [z1, z2, …], …] where x, y, z are different observables and the numbers indicate the observation times
+In [202]: a = np.array([[1,2,3,4,5], [6,7,8,9,10]])
+
+In [203]: b = np.corrcoef(a)
+
+In [204]: b
+Out[204]: 
+array([[ 1., 1.],
+[ 1., 1.]])
+
+The covariance for data can be found
+In [208]: np.cov(a)
+Out[208]: 
+array([[ 0.91666667, 2.08333333],
+[ 2.08333333, 8.91666667]])
