@@ -1,0 +1,519 @@
+SERIES IN PANDAS:  
+
+A series is an one-dimensional array containing an array of any data type and an associated array of data labels called index.
+
+
+In [1]: import pandas as pd
+
+In [3]: from pandas import Series, DataFrame
+
+
+
+Forming a simple series.
+
+In [4]: obj = Series([4,7,-3,1])
+
+In [5]: obj
+Out[5]: 
+0 4
+1 7
+2 -3
+3 1
+dtype: int64
+
+The Series is represented normally with an index at the left. Since we did not specify any index for data here, it specified an index on its own starting from 0 through N-1 where N is the length of data (in this case its 4).
+ 
+
+
+We can get an array representation and index objects of the Series via its values and index attributes - 
+
+In [6]: obj.values
+Out[6]: array([ 4, 7, -3, 1], dtype=int64)
+
+In [7]: obj.index
+Out[7]: RangeIndex(start=0, stop=4, step=1)
+
+
+
+It is good to create a Series with an index for each element in the Series.
+
+In [8]: obj2 = Series([4,7,-3,1], index = ['a','b','c','d'])
+
+In [9]: obj2
+Out[9]: 
+a 4
+b 7
+c -3
+d 1
+dtype: int64
+
+
+
+Compared to regular Numpy Array, in pandas, we can use values in the index when selecting a single values or a set of values.
+
+In [10]: obj2.index
+Out[10]: Index([u'a', u'b', u'c', u'd'], dtype='object')
+
+In [11]: obj2['a']
+Out[11]: 4
+
+In [12]: obj2['d'] - 4
+Out[12]: -3
+
+In [13]: obj2[['c', 'a', 'd']]
+Out[13]: 
+c -3
+a 4
+d 1
+dtype: int64
+
+
+
+NumPy array operations, such as filtering with Boolean array, Scalar multiplications, or applying math functions, will preserve the index value.
+
+In [14]: obj2
+Out[14]: 
+a 4
+b 7
+c -3
+d 1
+dtype: int64
+
+
+In [15]: obj2[obj2 > 0]
+Out[15]: 
+a 4
+b 7
+d 1
+dtype: int64
+
+
+In [16]: obj2 * 2
+Out[16]: 
+a 8
+b 14
+c -6
+d 2
+dtype: int64
+
+
+In [17]: import numpy as np
+
+
+In [18]: np.exp(obj2)
+Out[18]: 
+a 54.598150
+b 1096.633158
+c 0.049787
+d 2.718282
+dtype: float64
+
+
+
+We can also think of Series as a fixed-length, ordered dictionary, as it is a mapping of index values to data values. It can be substituted into many functions that expect a dictionary.
+
+In [19]: 'b' in obj2
+Out[19]: True
+
+In [21]: 'f' in obj2
+Out[21]: False
+
+
+
+If there is data in Python dictionary, we can create a Series from it by passing the dictionary.
+
+In [22]: sdata = {'Ohio': 35000, 'Texas': 71000, 'Oregon': 16000, 'Utah': 5000}
+
+
+In [23]: obj3 = Series(sdata)
+
+
+In [24]: obj3
+Out[24]: 
+Ohio 35000
+Oregon 16000
+Texas 71000
+Utah 5000
+dtype: int64
+
+
+
+
+While passing a dictionary, the index of the resulting Series will have the dictionary keys in the sorted order.
+
+In [25]: states = ['California', 'Ohio', 'Oregon', 'Texas']
+
+In [26]: obj4 = Series(sdata, index= states)
+
+In [27]: obj4
+Out[27]: 
+California NaN
+Ohio 35000.0
+Oregon 16000.0
+Texas 71000.0
+dtype: float64
+
+In this case, three values are found in sdata and were placed in the appropriate location. There was no value for California and hence it is NaN (Not an Number) which is considered in pandas to mark missing or NA values. 
+
+
+
+The isnull or notnull function in pandas is used to detect missing values.
+
+In [28]: pd.isnull(obj4)
+Out[28]: 
+California True
+Ohio False
+Oregon False
+Texas False
+dtype: bool
+
+
+In [29]: pd.notnull(obj4)
+Out[29]: 
+California False
+Ohio True
+Oregon True
+Texas True
+dtype: bool
+
+
+
+Pandas Series also has these as instance methods.
+
+In [30]: obj4.isnull()
+Out[30]: 
+California True
+Ohio False
+Oregon False
+Texas False
+dtype: bool
+
+
+
+Another important Series feature for many applications is that it automatically aligns differently indexed data in arithmetic operations.
+
+In [31]: obj3
+Out[31]: 
+Ohio 35000
+Oregon 16000
+Texas 71000
+Utah 5000
+dtype: int64
+
+
+In [32]: obj4
+Out[32]: 
+California NaN
+Ohio 35000.0
+Oregon 16000.0
+Texas 71000.0
+dtype: float64
+
+
+In [33]: obj3 + obj4
+Out[33]: 
+California NaN
+Ohio 70000.0
+Oregon 32000.0
+Texas 142000.0
+Utah NaN
+dtype: float64
+
+
+
+Both the Series objects and its index has a name attribute, which integrates with other key areas of pandas functionality.
+
+In [34]: obj4.name = 'population'
+
+In [35]: obj4.index.name = 'state'
+
+In [36]: obj4
+Out[36]: 
+state
+California NaN
+Ohio 35000.0
+Oregon 16000.0
+Texas 71000.0
+Name: population, dtype: float64
+
+
+
+A Series index can be altered by assigning it.
+
+In [37]: obj.index = ['Bob', 'Steve', 'Jeff', 'Ryan']
+
+In [38]: obj
+Out[38]: 
+Bob 4
+Steve 7
+Jeff -3
+Ryan 1
+dtype: int64
+
+
+
+
+
+
+DATA FRAMES:
+
+A DataFrame represents a tabular, spreadsheet-like data structure containing an ordered
+collection of columns, each of which can be a different value type (numeric,
+string, boolean, etc.). The DataFrame has both a row and column index; it can be
+thought of as a dict of Series (one for all sharing the same index).
+
+
+
+Though there are different ways to construct a DataFrame, the most common way is to form a dictionary of equal length lists or Numpy arrays.
+
+In [39]: data = {'state' : ['Ohio', 'Ohio', 'Ohio', 'Nevada', 'Nevada'],
+    ...: 'year' : [2000, 2001, 2002, 2001, 2002],
+    ...: 'pop' : [1.5, 1.7, 3.6, 2.4, 2.9]}
+
+In [40]: frame = DataFrame(data)
+
+
+
+The resulting DataFrame will have its index assigned automatically and the columns are placed in sorted order.
+
+In [41]: frame
+Out[41]: 
+     pop       state          year
+0   1.5        Ohio           2000
+1   1.7        Ohio           2001
+2   3.6        Ohio           2002
+3   2.4       Nevada          2001
+4   2.9       Nevada          2002
+
+ 
+
+If we specify a sequence of columns, the DataFrame’s columns will be exactly in the order of what we pass
+
+In [42]: DataFrame(data, columns = ['year', 'state', 'pop'])
+Out[42]: 
+        year          state            pop
+0       2000          Ohio             1.5
+1       2001          Ohio             1.7
+2       2002          Ohio             3.6
+3       2001         Nevada            2.4
+4       2002         Nevada            2.9
+
+
+
+If we pass a column that is not contained in the data, it will appear as NaN values.
+
+In [43]: frame2 = DataFrame(data, columns = ['year', 'state', 'pop', 'debt'],
+    ...: index = ['one', 'two', 'three', 'four', 'five'])
+
+In [44]: frame2
+Out[44]: 
+             year        state         pop         debt
+one          2000        Ohio          1.5          NaN
+two          2001        Ohio          1.7          NaN
+three        2002        Ohio          3.6          NaN
+four         2001       Nevada         2.4          NaN
+five         2002       Nevada         2.9          NaN
+
+
+
+A column in a DataFrame can be retrieved as a Series either by dictionary like notation or by attribute.
+
+In [45]: frame2.columns
+Out[45]: Index([u'year', u'state', u'pop', u'debt'], dtype='object')
+
+
+In [46]: frame2['state']
+Out[46]: 
+one      Ohio
+two      Ohio
+three    Ohio
+four     Nevada
+five     Nevada
+Name: state, dtype: object
+
+
+In [47]: frame2.year
+Out[47]: 
+one     2000
+two     2001
+three   2002
+four    2001
+five    2002
+Name: year, dtype: int64
+
+
+Note: The name attribute has the same index as the DataFrame, and their name attribute has been appropriately set.
+
+
+
+Rows can also be retrieved by position or name by a couple of methods, such as the
+ix indexing field.
+
+In [48]: frame2.ix['three']
+Out[48]: 
+year     2002
+state    Ohio
+pop      3.6
+debt     NaN
+Name: three, dtype: object
+
+
+
+Columns can also be assigned values and modified.
+
+In [49]: frame2['debt'] = 16.5
+
+In [50]: frame2
+Out[50]: 
+           year      state         pop           debt
+one        2000      Ohio          1.5           16.5
+two        2001      Ohio          1.7           16.5
+three      2002      Ohio          3.6           16.5
+four       2001     Nevada         2.4           16.5
+five       2002     Nevada         2.9           16.5
+
+In [52]: frame2['debt'] = np.arange(5.)
+ 
+In [53]: frame2
+Out[53]: 
+             year        state          pop            debt
+one          2000        Ohio           1.5             0.0
+two          2001        Ohio           1.7             1.0
+three        2002        Ohio           3.6             2.0
+four         2001       Nevada          2.4             3.0
+five         2002       Nevada          2.9             4.0
+
+
+
+While assigning lists or arrays to a column, the value’s length must match the length
+of the DataFrame. If you assign a Series, it will be instead conformed exactly to the
+DataFrame’s index, inserting missing values in any holes
+
+In [56]: val = Series([-1.4, -1.6, -1.7], index = ['two', 'four', 'five'])
+
+In [57]: frame2['debt'] = val
+
+In [58]: frame2
+Out[58]: 
+           year        state         pop         debt
+one        2000        Ohio          1.5         NaN
+two        2001        Ohio          1.7         -1.4
+three      2002        Ohio          3.6         NaN
+four       2001       Nevada         2.4         -1.6
+five       2002       Nevada         2.9         -1.7
+
+
+
+Assigning a column that doesn’t exist will create a new column. The del keyword will
+delete columns as with a dictionary.
+
+In [59]: frame2['western'] = frame2.state == 'Ohio'
+
+In [60]: frame2
+Out[60]: 
+            year         state             pop             debt              western
+one         2000         Ohio              1.5              NaN                True
+two         2001         Ohio              1.7              -1.4               True
+three       2002         Ohio              3.6              NaN                True
+four        2001        Nevada             2.4              -1.6               False
+five        2002        Nevada             2.9              -1.7               False
+
+In [61]: del frame2['western']
+
+In [62]: frame2.columns
+Out[62]: Index([u'year', u'state', u'pop', u'debt'], dtype='object')
+
+
+
+Another common form of data is a nested dict of dicts format
+
+In [63]: pop = {'Nevada' : {2001: 2.4, 2002: 2.9},
+    ...: 'Ohio' : {2000: 1.5, 2001: 1.7, 2002: 3.6}}
+
+
+
+If passed to DataFrame, it will interpret the outer dict keys as the columns and the inner
+keys as the row indices.
+
+In [64]: frame3 = DataFrame(pop)
+
+In [65]: frame3
+Out[65]: 
+               Nevada       Ohio
+2000            NaN          1.5
+2001            2.4          1.7
+2002            2.9          3.6
+
+
+
+We can also transpose the result
+
+In [66]: frame3.T
+Out[66]: 
+                    2000              2001              2002
+Nevada               NaN              2.4                2.9
+Ohio                 1.5              1.7                3.6
+
+
+
+The keys in the inner dicts are unioned and sorted to form the index in the result. This
+isn’t true if an explicit index is specified.
+
+In [67]: DataFrame(pop, index=[2001, 2002, 2003])
+Out[67]: 
+              Nevada           Ohio
+2001           2.4              1.7
+2002           2.9              3.6
+2003           NaN              NaN
+
+
+
+Dicts of Series are treated much in the same way.
+
+In [68]: pdata = {'Ohio': frame3['Ohio'][:-1],
+    ...: 'Nevada' : frame3['Nevada'][:2]}
+
+In [69]: DataFrame(pdata)
+Out[69]: 
+            Nevada        Ohio
+2000         NaN           1.5
+2001         2.4           1.7
+
+
+
+If the DataFrame’s index and column have their name attributes set, these will also be displayed. 
+
+In [70]: frame3.index.name = 'year'; frame3.columns.name = 'state
+
+In [71]: frame3
+Out[71]: 
+State       Nevada         Ohio
+year 
+2000         NaN           1.5
+2001         2.4           1.7
+2002         2.9           3.6
+
+
+
+Like Series, the values attribute returns the data contained in the DataFrame as a 2D
+ndarray
+
+In [72]: frame3.values
+Out[72]: 
+array([[ nan, 1.5],
+           [ 2.4, 1.7],
+           [ 2.9, 3.6]])
+
+
+
+If the DataFrame’s columns are different dtypes, the dtype of the values array will be
+chosen to accomodate all of the columns
+
+In [73]: frame2.values
+Out[73]: 
+array([[2000L, 'Ohio', 1.5, nan],
+           [2001L, 'Ohio', 1.7, -1.4],
+           [2002L, 'Ohio', 3.6, nan],
+           [2001L, 'Nevada', 2.4, -1.6],
+           [2002L, 'Nevada', 2.9, -1.7]], dtype=object)
+
